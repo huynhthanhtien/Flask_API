@@ -82,10 +82,9 @@ def callback():
     print(request)
     if not code:
         return jsonify({"error": "Code not found"}), 400
+    return jsonify(request.json())
 
-    return jsonify({"code": request.url})
-
-@app.route("/get_token", methods=["POST"])
+@app.route("/", methods=["POST"])
 def get_token():
     # Lấy mã code từ yêu cầu POST
     code = request.json.get("code")
@@ -94,7 +93,7 @@ def get_token():
 
     # Thiết lập URL callback và mã code
     flow.redirect_uri = GOOGLE_REDIRECT_URI
-    authorization_response = request.url_root + 'callback?code=' + code
+    authorization_response = request.url_root + code
 
     try:
         # Lấy token từ mã code
