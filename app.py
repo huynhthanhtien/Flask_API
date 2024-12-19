@@ -1,6 +1,6 @@
 import os
 import json
-from flask import Flask, redirect, request, jsonify
+from flask import Flask, redirect, request, jsonify, Response
 from dotenv import load_dotenv  # Sử dụng python-dotenv
 from google_auth_oauthlib.flow import Flow
 
@@ -52,10 +52,23 @@ def callback():
     # Tùy chọn: Lấy thông tin người dùng
     user_info = get_user_info(credentials)
     print(user_info)
-    return jsonify({
+    
+    response_data = {
         'access_token': token,
         'user_info': user_info
-    })
+    }
+
+    response = Response(
+        json.dumps(response_data), 
+        status=200, 
+        mimetype='application/json'
+    )
+    
+    return response
+    # return jsonify({
+    #     'access_token': token,
+    #     'user_info': user_info
+    # })
 
 def get_user_info(credentials):
     from googleapiclient.discovery import build
