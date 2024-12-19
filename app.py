@@ -70,11 +70,7 @@ def callback():
         'user_info': user_info
     }
 
-    return Response(
-        json.dumps(response_data), 
-        status=200, 
-        mimetype='application/json'
-    )
+    return response_data
 
 # @app.route('/callback')
 # def callback():
