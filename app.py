@@ -84,7 +84,7 @@ def callback():
         return jsonify({"error": "Code not found"}), 400
     return jsonify(request.args)
 
-@app.route("/", methods=["POST"])
+@app.route("/get_token", methods=["POST"])
 def get_token():
     # Lấy mã code từ yêu cầu POST
     code = request.json.get("code")
