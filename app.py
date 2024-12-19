@@ -82,7 +82,7 @@ def callback():
     if not code:
         return jsonify({"error": "Code not found"}), 400
 
-    return jsonify({"code": code})
+    return jsonify({"code": request})
 
 @app.route("/get_token", methods=["POST"])
 def get_token():
