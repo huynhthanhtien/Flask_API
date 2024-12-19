@@ -87,14 +87,14 @@ def callback():
 @app.route("/get_token", methods=["POST"])
 def get_token():
     # Lấy mã code từ yêu cầu POST
-    code = request.json.get("code")
-    state = request.json.get("state")
+    url = request.json.get("url")
+    # state = request.json.get("state")
     if not code:
         return jsonify({"error": "Code is required"}), 400
 
     # Thiết lập URL callback và mã code
     flow.redirect_uri = GOOGLE_REDIRECT_URI
-    authorization_response = request.url_root + "callback&state=" + state + "?code=" + code
+    authorization_response = url
     try:
         # Lấy token từ mã code
         flow.fetch_token(authorization_response=authorization_response)
