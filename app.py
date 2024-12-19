@@ -94,7 +94,7 @@ def get_token():
 
     # Thiết lập URL callback và mã code
     flow.redirect_uri = GOOGLE_REDIRECT_URI
-    authorization_response = request.url_root + "&state=" + state + "?code=" + code
+    authorization_response = request.url_root + "callback&state=" + state + "?code=" + code
     try:
         # Lấy token từ mã code
         flow.fetch_token(authorization_response=authorization_response)
