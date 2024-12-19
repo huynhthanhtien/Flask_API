@@ -19,6 +19,7 @@ GOOGLE_CLIENT_SECRET = client_secret["web"]["client_secret"]
 GOOGLE_REDIRECT_URI = client_secret["web"]["redirect_uris"][0]  # Lấy URI chuyển hướng đầu tiên
 
 # Initialize OAuth flow
+CORS(app, origins=["chrome-extension://*"])
 flow = Flow.from_client_config(
     client_secret,  # Sử dụng thông tin client secret từ chuỗi JSON
     # scopes=["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email", "https://www.googleapis.com/auth/calendar"],
@@ -30,7 +31,6 @@ flow = Flow.from_client_config(
     ],
     redirect_uri=GOOGLE_REDIRECT_URI
 )
-
 @app.route('/')
 def index():
     # Redirect user to Google login
