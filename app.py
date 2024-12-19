@@ -3,12 +3,14 @@ import json
 from flask import Flask, redirect, request, jsonify, Response
 from dotenv import load_dotenv  # Sử dụng python-dotenv
 from google_auth_oauthlib.flow import Flow
+from flask_cors import CORS
 
 # Nạp các biến môi trường từ .env
 load_dotenv()
 
 app = Flask(__name__)
 
+CORS(app, origins=["chrome-extension://*"])
 # Lấy chuỗi JSON từ biến môi trường và giải mã nó thành dictionary
 client_secret_json = os.getenv("GOOGLE_CLIENT_SECRET_JSON")
 client_secret = json.loads(client_secret_json)
@@ -19,7 +21,6 @@ GOOGLE_CLIENT_SECRET = client_secret["web"]["client_secret"]
 GOOGLE_REDIRECT_URI = client_secret["web"]["redirect_uris"][0]  # Lấy URI chuyển hướng đầu tiên
 
 # Initialize OAuth flow
-CORS(app, origins=["chrome-extension://*"])
 flow = Flow.from_client_config(
     client_secret,  # Sử dụng thông tin client secret từ chuỗi JSON
     # scopes=["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email", "https://www.googleapis.com/auth/calendar"],
