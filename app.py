@@ -49,32 +49,80 @@ def index():
     authorization_url, _ = flow.authorization_url(access_type='offline', include_granted_scopes='true')
     return redirect(authorization_url)
 
+# @app.route('/callback')
+# def callback():
+#     # Lấy mã xác thực từ Google và lấy token
+#     flow.fetch_token(authorization_response=request.url)
+
+#     if not flow.credentials:
+#         return jsonify({"error": "Authentication failed"}), 400
+
+#     # Lưu trữ credentials và trả về token
+#     credentials = flow.credentials
+#     token = credentials.token
+#     print(token)
+#     # Tùy chọn: Lấy thông tin người dùng
+#     user_info = get_user_info(credentials)
+#     print(user_info)
+    
+#     response_data = {
+#         'access_token': token,
+#         'user_info': user_info
+#     }
+
+#     return Response(
+#         json.dumps(response_data), 
+#         status=200, 
+#         mimetype='application/json'
+#     )
 @app.route('/callback')
 def callback():
-    # Lấy mã xác thực từ Google và lấy token
-    flow.fetch_token(authorization_response=request.url)
+    # Lấy mã code từ URL callback của Google
+    code = request.args.get("code")
+    if not code:
+        return jsonify({"error": "Code not found"}), 400
 
-    if not flow.credentials:
-        return jsonify({"error": "Authentication failed"}), 400
+    return jsonify({"code": code})
 
-    # Lưu trữ credentials và trả về token
-    credentials = flow.credentials
-    token = credentials.token
-    print(token)
-    # Tùy chọn: Lấy thông tin người dùng
-    user_info = get_user_info(credentials)
-    print(user_info)
-    
-    response_data = {
-        'access_token': token,
-        'user_info': user_info
-    }
+@app.route("/get_token", methods=["POST"])
+def get_token():
+    # Lấy mã code từ yêu cầu POST
+    code = request.json.get("code")
+    if not code:
+        return jsonify({"error": "Code is required"}), 400
 
-    return Response(
-        json.dumps(response_data), 
-        status=200, 
-        mimetype='application/json'
-    )
+    # Thiết lập URL callback và mã code
+    flow.redirect_uri = GOOGLE_REDIRECT_URI
+    authorization_response = request.url_root + 'callback?code=' + code
+
+    try:
+        # Lấy token từ mã code
+        flow.fetch_token(authorization_response=authorization_response)
+
+        if not flow.credentials:
+            return jsonify({"error": "Authentication failed"}), 400
+
+        # Lưu trữ credentials và trả về token
+        credentials = flow.credentials
+        token = credentials.token
+        print(token)
+
+        # Tùy chọn: Lấy thông tin người dùng
+        user_info = get_user_info(credentials)
+        print(user_info)
+
+        response_data = {
+            'access_token': token,
+            'user_info': user_info
+        }
+
+        return Response(
+            json.dumps(response_data),
+            status=200,
+            mimetype='application/json'
+        )
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
 
 
 def get_user_info(credentials):
