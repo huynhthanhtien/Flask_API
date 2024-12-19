@@ -3,7 +3,7 @@ FROM python:3.9-slim
 
 # Cài đặt các thư viện cần thiết
 RUN pip install --upgrade pip
-RUN pip install flask python-dotenv google-auth google-auth-oauthlib google-auth-httplib2 gunicorn
+RUN pip install flask python-dotenv google-auth google-auth-oauthlib google-auth-httplib2 gunicorn google-api-python-client
 
 # Sao chép mã nguồn vào container
 WORKDIR /app
