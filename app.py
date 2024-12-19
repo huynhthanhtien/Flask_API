@@ -58,4 +58,4 @@ def get_user_info(credentials):
     return user_info
 
 if __name__ == '__main__':
-    app.run(ssl_context=('server.crt', 'server.key'), host='0.0.0.0', port=5000)
+    app.run(ssl_context=('server.crt', 'server.key'), host='0.0.0.0', port=5000, debug=True)
