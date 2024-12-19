@@ -21,7 +21,13 @@ GOOGLE_REDIRECT_URI = client_secret["web"]["redirect_uris"][0]  # Lấy URI chuy
 # Initialize OAuth flow
 flow = Flow.from_client_config(
     client_secret,  # Sử dụng thông tin client secret từ chuỗi JSON
-    scopes=["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email"],
+    # scopes=["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email", "https://www.googleapis.com/auth/calendar"],
+     scopes=[
+        "openid",  # Thêm OpenID
+        "https://www.googleapis.com/auth/userinfo.profile", 
+        "https://www.googleapis.com/auth/userinfo.email",
+        "https://www.googleapis.com/auth/calendar"
+    ],
     redirect_uri=GOOGLE_REDIRECT_URI
 )
 
