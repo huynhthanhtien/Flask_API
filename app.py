@@ -89,7 +89,7 @@ def get_token():
     # Lấy mã code từ yêu cầu POST
     url = request.json.get("url")
     # state = request.json.get("state")
-    if not code:
+    if not url:
         return jsonify({"error": "Code is required"}), 400
 
     # Thiết lập URL callback và mã code
