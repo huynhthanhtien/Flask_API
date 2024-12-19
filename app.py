@@ -79,10 +79,11 @@ def index():
 def callback():
     # Lấy mã code từ URL callback của Google
     code = request.args.get("code")
+    print(request)
     if not code:
         return jsonify({"error": "Code not found"}), 400
 
-    return jsonify({"code": request})
+    return jsonify({"code": request.url})
 
 @app.route("/get_token", methods=["POST"])
 def get_token():
