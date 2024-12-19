@@ -1,0 +1,13 @@
+version: '3'
+
+services:
+  flask-app:
+    build: .
+    ports:
+      - "5000:5000"
+    env_file:
+      - .env
+    volumes:
+      - .:/app
+      - ./server.crt:/server.crt
+      - ./server.key:/server.key
