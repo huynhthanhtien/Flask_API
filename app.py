@@ -32,16 +32,22 @@ flow = Flow.from_client_config(
     ],
     redirect_uri=GOOGLE_REDIRECT_URI
 )
-@app.route('/')
+
+@app.route('/login')
 def index():
     # Redirect user to Google login
     authorization_url, _ = flow.authorization_url(access_type='offline', include_granted_scopes='true')
-    # return redirect(authorization_url)
     return Response(
         json.dumps({"url": authorization_url}), 
         status=200, 
         mimetype='application/json'
     )
+
+@app.route('/')
+def index():
+    # Redirect user to Google login
+    authorization_url, _ = flow.authorization_url(access_type='offline', include_granted_scopes='true')
+    return redirect(authorization_url)
 
 @app.route('/callback')
 def callback():
@@ -71,10 +77,7 @@ def callback():
     )
     
     return response
-    # return jsonify({
-    #     'access_token': token,
-    #     'user_info': user_info
-    # })
+
 
 def get_user_info(credentials):
     from googleapiclient.discovery import build
