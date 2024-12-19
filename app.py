@@ -34,7 +34,7 @@ flow = Flow.from_client_config(
 )
 
 @app.route('/login')
-def index():
+def login():
     # Redirect user to Google login
     authorization_url, _ = flow.authorization_url(access_type='offline', include_granted_scopes='true')
     return Response(
