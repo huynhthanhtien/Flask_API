@@ -70,13 +70,11 @@ def callback():
         'user_info': user_info
     }
 
-    response = Response(
+    return Response(
         json.dumps(response_data), 
         status=200, 
         mimetype='application/json'
     )
-    
-    return response
 
 
 def get_user_info(credentials):
