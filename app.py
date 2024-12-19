@@ -42,10 +42,10 @@ def callback():
     # Lưu trữ credentials và trả về token
     credentials = flow.credentials
     token = credentials.token
-
+    print(token)
     # Tùy chọn: Lấy thông tin người dùng
     user_info = get_user_info(credentials)
-
+    print(user_info)
     return jsonify({
         'access_token': token,
         'user_info': user_info

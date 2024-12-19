@@ -3,7 +3,7 @@ FROM python:3.9-slim
 
 # Cài đặt các thư viện cần thiết
 RUN pip install --upgrade pip
-RUN pip install flask python-dotenv google-auth google-auth-oauthlib google-auth-httplib2
+RUN pip install flask python-dotenv google-auth google-auth-oauthlib google-auth-httplib2 gunicorn
 
 # Sao chép mã nguồn vào container
 WORKDIR /app
@@ -14,4 +14,4 @@ ENV FLASK_APP=app.py
 ENV FLASK_RUN_HOST=0.0.0.0
 
 # Chạy Flask app
-CMD ["flask", "run"]
+CMD ["gunicorn", "--bind", "0.0.0.0:5000", "app:app"]
