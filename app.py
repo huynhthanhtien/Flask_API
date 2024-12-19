@@ -36,7 +36,12 @@ flow = Flow.from_client_config(
 def index():
     # Redirect user to Google login
     authorization_url, _ = flow.authorization_url(access_type='offline', include_granted_scopes='true')
-    return redirect(authorization_url)
+    # return redirect(authorization_url)
+    return Response(
+        json.dumps({"url": authorization_url}), 
+        status=200, 
+        mimetype='application/json'
+    )
 
 @app.route('/callback')
 def callback():
