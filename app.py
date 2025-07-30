@@ -75,14 +75,49 @@ def index():
 #         status=200, 
 #         mimetype='application/json'
 #     )
+from flask import render_template_string
+
 @app.route('/callback')
 def callback():
-    # Lấy mã code từ URL callback của Google
     code = request.args.get("code")
-    print(f"request: {request}")
     if not code:
         return jsonify({"error": "Code not found"}), 400
-    return jsonify(request.url)
+
+    flow.redirect_uri = GOOGLE_REDIRECT_URI
+    authorization_response = request.url
+
+    try:
+        flow.fetch_token(authorization_response=authorization_response)
+
+        if not flow.credentials:
+            return jsonify({"error": "Authentication failed"}), 400
+
+        credentials = flow.credentials
+        token = credentials.token
+        user_info = get_user_info(credentials)
+
+        # Render một HTML page trả về kết quả cho frontend (qua postMessage)
+        html_content = """
+        <!DOCTYPE html>
+        <html>
+        <head><title>Auth Success</title></head>
+        <body>
+            <script>
+                window.opener.postMessage({
+                    access_token: "%s",
+                    user_info: %s
+                }, "*");
+                window.close();
+            </script>
+        </body>
+        </html>
+        """ % (token, json.dumps(user_info))
+
+        return render_template_string(html_content)
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
+
 
 @app.route("/get_token", methods=["POST"])
 def get_token():
