@@ -10,7 +10,7 @@ load_dotenv()
 
 app = Flask(__name__)
 
-CORS(app, origins=["chrome-extension://*"])
+CORS(app, origins=["*"], supports_credentials=True)
 # Lấy chuỗi JSON từ biến môi trường và giải mã nó thành dictionary
 client_secret_json = os.getenv("GOOGLE_CLIENT_SECRET_JSON")
 client_secret = json.loads(client_secret_json)
