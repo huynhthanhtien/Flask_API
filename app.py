@@ -159,6 +159,19 @@ def get_token():
     except Exception as e:
         return jsonify({"error": str(e)}), 400
 
+@app.route('/logout', methods=['POST'])
+def logout():
+    token = request.json.get('token')  # Access token từ phía client gửi lên
+    if not token:
+        return jsonify({"error": "Token is required"}), 400
+
+    revoke_url = f"https://oauth2.googleapis.com/revoke?token={token}"
+    response = requests.post(revoke_url)
+
+    if response.status_code == 200:
+        return jsonify({"message": "Token revoked successfully"})
+    else:
+        return jsonify({"error": "Failed to revoke token"}), 400
 
 def get_user_info(credentials):
     from googleapiclient.discovery import build
